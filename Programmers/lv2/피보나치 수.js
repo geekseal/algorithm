@@ -2,7 +2,7 @@ function solution(n) {
   let fiboSequence = [1, 0];
   while (n >= 2) {
     [a, b] = fiboSequence;
-    fiboSequence = [(a + b) % 1234567, a % 1234567];
+    fiboSequence = [(a + b) % 1234567, a % 1234567]; // to take care of overflow
     n--;
   }
   return fiboSequence[0];
