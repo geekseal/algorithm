@@ -1,5 +1,5 @@
-import sys, itertools
-from heapq import heappush, heappop, heapify
+import sys
+from heapq import heappush, heappop, heapify, _siftdown, _siftup
 sys.stdin = open("input.txt", "r")
 
 T = int(input())
@@ -19,6 +19,7 @@ for case_num in range(T):
             heappush(pq, (d, (y, x)))
 
     while D[ey][ex] == float('inf'):
+        # print(d, y, x)
         d, (y, x) = heappop(pq)
         for dy, dx in adjacent:
             if x+dx < 0 or x+dx >= N or y+dy < 0 or y+dy >= N:
@@ -30,9 +31,18 @@ for case_num in range(T):
                 # because it will no longer satisfy the heap invariant.
                 # https://docs.python.org/3/library/heapq.html#priority-queue-implementation-notes
                 # https://stackoverflow.com/questions/10162679/python-delete-element-from-heap
+                i = pq.index((D[y+dy][x+dx], (y+dy, x+dx)))
+                pq[i] = pq[-1]
+                pq.pop()
+                if i < len(pq):
+                    _siftup(pq, i)
+                    _siftdown(pq, 0, i)
+                
+                '''
+                below raises time error in case 10
                 pq.remove((D[y+dy][x+dx], (y+dy, x+dx)))
                 heapify(pq)
-                # time error in case 10
+                '''
 
                 # however, it is much faster to use (try, except) rather than re-heapifying it,
                 # if heap invariant doesn't matter to you.
