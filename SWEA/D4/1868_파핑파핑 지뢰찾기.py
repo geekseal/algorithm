@@ -1,10 +1,6 @@
 import sys
 sys.stdin = open("input.txt", "r")
 
-VISITED = 'O'
-UNVISITED = 'X'
-BOMB = 'bomb'
-
 T = int(input())
 for case_num in range(T):
     # if case_num == 1:
@@ -12,39 +8,36 @@ for case_num in range(T):
     N = int(input())
     arr = [list(input()) for _ in range(N)]
     adjacent = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
-    bvmap = [[[data, UNVISITED] for data in row] for row in arr] # bomb-visit map: [bomb_num, visited]
+    visited = [[False for _ in range(N)] for _ in range(N)]
+    bomb_map = [[0] * N for _ in range(N)]
 
     # count the number of adjacent bombs
-    for y, row in enumerate(bvmap):
-        for x, [data, _] in enumerate(row):
+    for y, row in enumerate(arr):
+        for x, data in enumerate(row):
             if data == '.':
-                bomb_num = 0
                 for dy, dx in adjacent:
-                    if x+dx < 0 or x+dx >= N or y+dy < 0 or y+dy >= N:
-                        continue
-                    bomb_num += 1 if bvmap[y+dy][x+dx][0] == '*' else 0
-                    bvmap[y][x][0] = bomb_num
+                    if 0 <= x+dx < N and 0 <= y+dy < N:
+                        bomb_map[y][x] += 1 if arr[y+dy][x+dx] == '*' else 0
             else:
-                bvmap[y][x][1] = BOMB
+                bomb_map[y][x] = -1
 
-    # find 0 group
+    # find 0 click
     click = 0
-    for y, row in enumerate(bvmap):
-        for x, [data, is_visited] in enumerate(row):
-            if data == 0:
-                if is_visited == UNVISITED:
+    for y, row in enumerate(bomb_map):
+        for x, bomb_num in enumerate(row):
+            if bomb_num == 0:
+                if not visited[y][x]:
                     click += 1
-
-                bvmap[y][x][1] = VISITED
+                    visited[y][x] = True
                 
                 for dy, dx in adjacent:
-                    if x+dx < 0 or x+dx >= N or y+dy < 0 or y+dy >= N:
-                        continue
-                    bvmap[y+dy][x+dx][1] = VISITED
+                    if 0 <= x+dx < N and 0 <= y+dy < N:
+                        if not visited[y+dy][x+dx]:
+                            visited[y+dy][x+dx] = True
                     
-    for row in bvmap:
-        for [data, is_visited] in row:
-            if is_visited == UNVISITED:
+    for y in range(N):
+        for x in range(N):
+            if bomb_map[y][x] != -1 and not visited[y][x]:
                 click += 1
 
     print(f'#{case_num + 1} {click}')
