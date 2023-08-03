@@ -7,14 +7,16 @@ public class Main {
 		int N = sc.nextInt();
 		int M = sc.nextInt();
 		int L = sc.nextInt();
+		sc.close();
 		
-		int[] count = {0, 0, 0, 0, 0};
+		int[] count = new int[N];
 		
-		int cur = 0;
 		int ptr = 0;
 		int answer = 0;
-		while (cur != M) {
+		
+		while (count[ptr] != M) {
 			count[ptr] += 1;
+			if (count[ptr] == M) break;
 			
 			if (count[ptr] % 2 == 1) {
 				ptr = (ptr + L) % N;
@@ -23,11 +25,9 @@ public class Main {
 			}
 			
 			answer += 1;
-			cur = count[ptr];
 		}
 		
 		System.out.println(answer);
-		sc.close();
+		
 	}
 }
-
