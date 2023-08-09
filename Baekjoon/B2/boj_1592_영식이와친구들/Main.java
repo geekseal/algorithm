@@ -1,3 +1,5 @@
+package boj_1592_영식이와친구들;
+
 import java.util.Scanner;
 
 public class Main {
@@ -31,3 +33,4 @@ public class Main {
 		
 	}
 }
+

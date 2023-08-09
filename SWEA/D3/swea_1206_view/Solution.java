@@ -1,3 +1,5 @@
+package swea_1206_view;
+
 import java.util.Scanner;
 
 class Solution

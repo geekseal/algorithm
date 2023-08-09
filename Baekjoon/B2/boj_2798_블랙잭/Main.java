@@ -1,3 +1,5 @@
+package boj_2798_블랙잭;
+
 import java.util.Scanner;
 
 public class Main {

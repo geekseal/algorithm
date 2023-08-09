@@ -1,3 +1,5 @@
+package swea_1954_달팽이숫자;
+
 import java.util.Scanner;
 
 class Solution

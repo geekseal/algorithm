@@ -1,3 +1,5 @@
+package swea_5356_의석이의세로로말해요;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 	
