@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public class Main {
 	static void dfs(int r, int c, int[][] arr, boolean[][] visited) {
-		// check right, down
+		// should check all ways, not just right&down
 		int[][] adjacents = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
 		
 		for (int[] adjacent: adjacents) {
