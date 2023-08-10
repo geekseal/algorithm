@@ -40,6 +40,6 @@ class Solution
 			
 			System.out.printf("#%d %d\n", test_case, Arrays.stream(max).max().getAsInt());
 		}
-		
+		sc.close();
 	}
 }
