@@ -1,4 +1,4 @@
-package boj_1012_유기농배추;
+package silver_2.boj_1012_유기농배추;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -41,7 +41,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws NumberFormatException, IOException {
-		System.setIn(new FileInputStream("S2/boj_1012_유기농배추/input.txt"));
+		System.setIn(new FileInputStream("silver_2/boj_1012_유기농배추/input.txt"));
 		
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(bf.readLine()); 

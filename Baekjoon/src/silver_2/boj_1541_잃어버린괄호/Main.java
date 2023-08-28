@@ -1,4 +1,4 @@
-package boj_1541_잃어버린괄호;
+package silver_2.boj_1541_잃어버린괄호;
 
 import java.io.BufferedReader;
 import java.io.IOException;
