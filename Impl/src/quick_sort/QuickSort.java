@@ -17,7 +17,7 @@ public class QuickSort {
 
 		while (l <= r) {
 			while (l <= r && s[l] < pivot) l++;
-			while (l <= r && s[r] >= pivot) r--;
+			while (l <= r && s[r] >= pivot) r--; // 한쪽이 무시하지 않으면 무한루프 돌 수 있음
 			if (l <= r) {
 				int temp = s[l];
 				s[l] = s[r];
