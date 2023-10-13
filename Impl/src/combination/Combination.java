@@ -22,7 +22,7 @@ public class Combination {
 	
 	public static void main(String[] args) {
 		N = 7;
-		K = 6;
+		K = 3;
 		arr = new int[] {1,2,3,4,5,6,7};
 		sel = new int[K];
 		

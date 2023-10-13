@@ -2,7 +2,7 @@ package powerset;
 
 import java.util.Arrays;
 
-public class BitMask {
+public class Bitmasking {
 	static int[] arr;
 	
 	public static void main(String[] args) {
