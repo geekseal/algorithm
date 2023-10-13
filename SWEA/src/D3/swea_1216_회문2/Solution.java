@@ -1,4 +1,4 @@
-package swea_1216_회문2;
+package D3.swea_1216_회문2;
 
 import java.io.FileInputStream;
 import java.util.Scanner;

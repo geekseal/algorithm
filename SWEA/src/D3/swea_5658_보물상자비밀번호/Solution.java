@@ -1,4 +1,4 @@
-package swea_5658_보물상자비밀번호;
+package D3.swea_5658_보물상자비밀번호;
 
 import java.io.FileInputStream;
 import java.util.LinkedList;

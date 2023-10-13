@@ -1,4 +1,4 @@
-package swea_1213_string;
+package D3.swea_1213_string;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;

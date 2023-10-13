@@ -1,4 +1,4 @@
-package swea_11315_오목판정;
+package D3.swea_11315_오목판정;
 
 import java.io.FileInputStream;
 import java.util.Scanner;

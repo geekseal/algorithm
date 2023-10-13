@@ -1,4 +1,4 @@
-package swea_1210_ladder1;
+package D4.swea_1210_ladder1;
 
 import java.io.FileInputStream;
 import java.util.Scanner;

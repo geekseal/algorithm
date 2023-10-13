@@ -1,4 +1,4 @@
-package swea_1208_flatten;
+package D3.swea_1208_flatten;
 
 import java.io.FileInputStream;
 import java.util.Scanner;

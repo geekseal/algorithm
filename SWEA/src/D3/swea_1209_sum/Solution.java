@@ -1,4 +1,4 @@
-package swea_1209_sum;
+package D3.swea_1209_sum;
 // https://stackoverflow.com/questions/47976489/difference-between-optionalint-and-int
 import java.io.FileInputStream;
 import java.util.Arrays;
