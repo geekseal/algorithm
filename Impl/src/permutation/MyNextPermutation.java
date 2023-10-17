@@ -3,7 +3,7 @@ package permutation;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Next {
+public class MyNextPermutation {
 	static int N;
 	static int[] next(int[] arr) {
 		boolean isLast = true;
