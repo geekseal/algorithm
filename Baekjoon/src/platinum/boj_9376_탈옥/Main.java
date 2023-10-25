@@ -3,10 +3,8 @@ package platinum.boj_9376_탈옥;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -14,29 +12,30 @@ public class Main {
 	final static char PATH = '.';
 	final static char DOOR = '#';
 	final static char PRISONER = '$';
+	final static char PADDING = 0;
 	static class Pos {
-		int r, c, prisonerNumber;
+		int r, c, level;
 
 		public Pos(int r, int c) {
 			super();
 			this.r = r;
 			this.c = c;
 		}
-		
-		public Pos(int r, int c, int prisonerNumber) {
+
+		public Pos(int r, int c, int level) {
 			super();
 			this.r = r;
 			this.c = c;
-			this.prisonerNumber = prisonerNumber;
+			this.level = level;
 		}
 	}
 	
 	static char[][] arr;
-	static int[][][] dp;
-	static boolean[][][] visited;
-	static int[] dr = new int[] {0,-1,0,1};
-	static int[] dc = new int[] {-1,0,1,0};
+	static int R, C;
 	
+	// up-right-down-left
+	static int[] dr = new int[] {-1,0,1,0};
+	static int[] dc = new int[] {0,1,0,-1};
 	
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -44,104 +43,116 @@ public class Main {
 		int T = Integer.parseInt(bf.readLine());
 		StringBuilder ans = new StringBuilder();
 		
-		
 		for (int tc=1; tc<=T; tc++) {
-			int R, C;
 			StringTokenizer st = new StringTokenizer(bf.readLine());
-			R = Integer.parseInt(st.nextToken());
-			C = Integer.parseInt(st.nextToken());
+			R = Integer.parseInt(st.nextToken()) + 2;
+			C = Integer.parseInt(st.nextToken()) + 2;
 			
 			arr = new char[R][C];
-			dp = new int[R][C][2];
-			visited = new boolean[R][C][2];
 			
-			List<Pos> exits = new ArrayList<>();
 			
-			//prisonerNumber: 0~1
-			int prisonerNumber = 0;
-			Pos p0, p1;
+			Pos p1 = null;
+			Pos p2 = null;
 			
-			for (int r=0; r<R; r++) {
+			for (int r=1; r<=R-2; r++) {
 				String line = bf.readLine();
-				for (int c=0; c<C; c++) {
+				for (int c=1; c<=C-2; c++) {
 					
-					char cell = line.charAt(c);
+					char cell = line.charAt(c-1);
 					//기본 정보 저장
 					arr[r][c] = cell;
-					//출구 정보 저장
-					if (cell==DOOR || cell==PATH) {
-						if (r==0 || r==R-1 || c==0 || c==C-1) {
-							exits.add(new Pos(r, c));
-						}
-					}
-					//dp배열 초기화
-					dp[r][c][0] = Integer.MAX_VALUE;
-					dp[r][c][1] = Integer.MAX_VALUE;
-					//큐에 넣기
-					if (cell==PRISONER) {
-						dp[r][c][prisonerNumber] = 0;
-						if (prisonerNumber==0) {
-							p0 = new Pos(r, c, prisonerNumber);
+					
+					//죄수 좌표 저장
+					if (cell == PRISONER) {
+						if (p1 == null) {
+							p1 = new Pos(r, c, 0);
 						} else {
-							p1 = new Pos(r, c, prisonerNumber);
+							p2 = new Pos(r, c, 0);
 						}
-						
-						prisonerNumber++;
 					}
+					
 				}
 			}
 			//인풋 끝
 			
-			//bfs로 시도해봤는데 안 될듯
-			//dfs로 해야 죄수 두명에 대해 같은 상황이 연출될듯
-			dfs(p0, p1);
+			int[][] map1 = bfs(new Pos(0, 0, 0));
+			int[][] map2 = bfs(p1);
+			int[][] map3 = bfs(p2);
 			
+//			for (int r=0; r<R; r++) {
+//				for (int c=0; c<C; c++) {
+//					System.out.print(map1[r][c]+map2[r][c]+map3[r][c]+" ");
+//				}
+//				System.out.println();
+//			}
 			
-			//bfs+dp
-			while (!q.isEmpty()) {
-				//하나만 꺼내면 죄수 두명 반영이 안될 것 같은데
-				Pos p = q.poll();
-				int r, c, pn;
-				r = p.r;
-				c = p.c;
-				pn = p.prisonerNumber;
-				
-				if (visited[r][c][pn]) continue;
-				visited[r][c][pn] = true;
-				
-				for (int i=0; i<4; i++) {
-					int nr = r+dr[i];
-					int nc = c+dc[i];
-					if (nr<0 || nr>=R || nc<0 || nc>=C) continue;
-					if (arr[nr][nc]==WALL) continue;
+			int min = Integer.MAX_VALUE;
+			for (int r=0; r<R; r++) {
+				for (int c=0; c<C; c++) {
+					char cell = arr[r][c];
 					
-					//main logic
-					if (arr[nr][nc]==DOOR) {
-						int nw = dp[r][c][pn]+1;
-						if (nw<dp[nr][nc][pn]) {
-							dp[nr][nc][pn] = nw;
-							q.offer(new Pos(nr, nc, pn));
-						}
-					} else if (arr[nr][nc]==PATH) {
-						int nw = dp[r][c][pn];
-						if (nw<dp[nr][nc][pn]) {
-							dp[nr][nc][pn] = nw;
-							q.offer(new Pos(nr, nc, pn));
-						}
-					}
+					//아래와 같이 일반 길이나 문인데 도달할 수 없는 경우 최솟값 계산에서 제외해야함.
+					//패딩의 경우도 따질 필요 없을 것 같은데?
+					/*
+					 * ***
+					 * *.*
+					 * ***
+					 */
+					if (cell==WALL || map1[r][c]*map2[r][c]*map3[r][c]<0) continue;
+					
+					int temp = map1[r][c] + map2[r][c] + map3[r][c];
+					//문인 경우 1명만 열면 되므로 -2
+					if (cell==DOOR) temp -= 2;
+					
+					if (temp<min) min = temp;
 				}
 			}
 			
-			int min = Integer.MAX_VALUE;
-			
-		}
+			ans.append(min+"\n");
+		} //tc ends
 		
 		System.out.println(ans);
 	}
 
-
-	private static void dfs(Pos p0, Pos p1) {
+	private static int[][] bfs(Pos pos) {
+		Deque<Pos> deque = new LinkedList<>();
+		boolean[][] visited = new boolean[R][C];
 		
+		int[][] map = new int[R][C];
+		for (int r=0; r<R; r++) {
+			for (int c=0; c<C; c++) {
+				map[r][c] = -1;
+			}
+		}
+		
+		deque.add(pos);
+		while (!deque.isEmpty()) {
+			Pos p = deque.poll();
+			int r, c, level;
+			r = p.r;
+			c = p.c;
+			level = p.level;
+			
+			if (visited[r][c]) continue;
+			visited[r][c] = true;
+			
+			map[r][c] = level;
+			
+			for (int i=0; i<4; i++) {
+				int nr = r+dr[i];
+				int nc = c+dc[i];
+				if (nr<0 || nr>=R || nc<0 || nc>=C) continue;
+				if (arr[nr][nc]==WALL) continue;
+				
+				if (arr[nr][nc]==PATH || arr[nr][nc]==PADDING || arr[nr][nc]==PRISONER) {
+					deque.offerFirst(new Pos(nr, nc, level));
+				}
+				if (arr[nr][nc]==DOOR) {
+					deque.offerLast(new Pos(nr, nc, level+1));
+				}
+			}
+		}
+		
+		return map;
 	}
-
 }
